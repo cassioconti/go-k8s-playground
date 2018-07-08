@@ -15,6 +15,7 @@ APP?=advent
 PORT?=8000
 GOOS?=linux
 GOARCH?=amd64
+CONTAINER_IMAGE?=docker.io/cassioconti/${APP}
 
 clean:
 	rm -f ${APP}
@@ -29,13 +30,25 @@ build: clean
 		-o ${APP}
 
 container: build
-	docker build -t ${APP}:${RELEASE} .
+	docker build -t ${CONTAINER_IMAGE}:${RELEASE} .
 
 run: container
 	docker stop ${APP}:${RELEASE} || true && docker rm ${APP}:${RELEASE} || true
 	docker run --name ${APP} -p ${PORT}:${PORT} --rm \
 		-e "PORT=${PORT}" \
 		${APP}:${RELEASE}
+
+push: container
+	docker push ${CONTAINER_IMAGE}:${RELEASE}
+
+minikube: push
+	for t in $(shell find ./kubernetes/ -type f -name "*.yaml"); do \
+        cat $$t | \
+        	gsed -E "s/\{\{(\s*)\.Release(\s*)\}\}/$(RELEASE)/g" | \
+        	gsed -E "s/\{\{(\s*)\.ServiceName(\s*)\}\}/$(APP)/g"; \
+        echo ---; \
+    done > tmp.yaml
+	kubectl apply -f tmp.yaml
 
 test:
 	go test -v -race ./...
