@@ -41,14 +41,14 @@ run: container
 push: container
 	docker push ${CONTAINER_IMAGE}:${RELEASE}
 
-# deploy: push
-# 	for t in $(shell find ./kubernetes/ -type f -name "*.yaml"); do \
-#         cat $$t | \
-#         	sed -E "s/\{\{(\s*)\.Release(\s*)\}\}/$(RELEASE)/g" | \
-#         	sed -E "s/\{\{(\s*)\.ServiceName(\s*)\}\}/$(APP)/g"; \
-#         echo -e "\n---"; \
-#     done > tmp.yaml
-# 	kubectl apply -f tmp.yaml
+deploy:
+	for t in $(shell find ./kubernetes/ -type f -name "*.yaml"); do \
+        cat $$t | \
+        	sed -E "s/\{\{(\s*)\.Release(\s*)\}\}/$(RELEASE)/g" | \
+        	sed -E "s/\{\{(\s*)\.ServiceName(\s*)\}\}/$(APP)/g"; \
+        echo -e "\n---"; \
+    done > tmp.yaml
+	kubectl apply -f tmp.yaml
 
 deploy-no-ingress:
 	kubectl run ${APP} --image=${CONTAINER_IMAGE}:${RELEASE} --port 8000
