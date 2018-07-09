@@ -1,14 +1,15 @@
 package main
 
 import (
-	"cassio-test-k8s-ready-service/handlers"
-	"cassio-test-k8s-ready-service/version"
 	"context"
 	"log"
 	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
+
+	"github.com/cassioconti/go-k8s-playground/handlers"
+	"github.com/cassioconti/go-k8s-playground/version"
 )
 
 func main() {

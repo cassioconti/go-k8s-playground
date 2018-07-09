@@ -11,6 +11,10 @@ First of all, thanks to Elena Grahovac for her awesome tutorial.
 
 You can update the `Makefile` if you want to change the PORT where the server will run, currently set to `8000`.
 
+Get the dependencies by running:
+
+`dep ensure`
+
 ### Build
 
 If you want to only build a docker image, run:
