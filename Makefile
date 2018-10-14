@@ -12,7 +12,7 @@ COMMIT?=${shell git rev-parse --short HEAD}
 BUILD_TIME?=${shell date -u '+%Y-%m-%d_%H:%M:%S'}
 
 APP?=advent
-PORT?=8000
+PORT?=8080
 GOOS?=linux
 GOARCH?=amd64
 CONTAINER_IMAGE?=docker.io/cassioconti/${APP}
@@ -51,8 +51,8 @@ deploy:
 	kubectl apply -f tmp.yaml
 
 deploy-no-ingress:
-	kubectl run ${APP} --image=${CONTAINER_IMAGE}:${RELEASE} --port 8000
-	kubectl expose deployment ${APP} --type=LoadBalancer --port 80 --target-port 8000
+	kubectl run ${APP} --image=${CONTAINER_IMAGE}:${RELEASE} --port 8080
+	kubectl expose deployment ${APP} --type=LoadBalancer --port 80 --target-port 8080
 	kubectl get service
 
 kubectl-cleanup:

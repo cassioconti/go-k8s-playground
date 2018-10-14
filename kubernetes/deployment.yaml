@@ -1,16 +1,15 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1beta2
 kind: Deployment
 metadata:
   name: {{ .ServiceName }}
+  namespace: services
   labels:
     app: {{ .ServiceName }}
 spec:
-  replicas: 3
-  strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxUnavailable: 50%
-      maxSurge: 1
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .ServiceName }}
   template:
     metadata:
       labels:
@@ -21,15 +20,15 @@ spec:
         image: docker.io/cassioconti/{{ .ServiceName }}:{{ .Release }}
         imagePullPolicy: Always
         ports:
-        - containerPort: 8000
+        - containerPort: 8080
         livenessProbe:
           httpGet:
             path: /healthz
-            port: 8000
+            port: 8080
         readinessProbe:
           httpGet:
             path: /readyz
-            port: 8000
+            port: 8080
         resources:
           limits:
             cpu: 10m

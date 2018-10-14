@@ -9,7 +9,7 @@ First of all, thanks to Elena Grahovac for her awesome tutorial.
 
 ### Config
 
-You can update the `Makefile` if you want to change the PORT where the server will run, currently set to `8000`.
+You can update the `Makefile` if you want to change the PORT where the server will run, currently set to `8080`.
 
 Get the dependencies by running:
 
